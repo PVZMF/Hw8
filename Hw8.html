@@ -5,27 +5,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <script>
         function tbDate(obj){
-            let table = document.createElement("table")
-            table.style.border = "1px solid black";
+            
             let trh = document.createElement("tr");
             let tr = document.createElement("tr");
-            table.style.padding = "20px 0 0 0";
             for (el in obj){
-                if (el === "id"){
-                    obj[el]%2 === 0?table.style.background = "gray":table.style.background = "white";
-                }
+
                 let tdid = document.createElement("td");
                 let thid = document.createElement("th");
+
                 tdid.style.border = "1px solid black";
                 thid.style.border = "1px solid black";
                 thid.innerHTML = el;
                 trh.append(thid);
+
                 if (typeof(obj[el])==="object"){
-                    tdid.appendChild(tbDate(obj[el]));
+                    [chtrh,chtr] = tbDate(obj[el]);
+                    tdid.append(chtrh,chtr);
                     tr.append(tdid);
                 }
                 else{
@@ -33,17 +33,23 @@
                 tr.append(tdid);
                 }
             }
-            table.append(trh,tr)
-            return table;
+            return ([trh,tr]);
         }
+      let table = document.createElement("table");
+      table.style.border = "1px solid black";
+
       fetch("https://jsonplaceholder.typicode.com/users")
         .then((res) => res.json())
         .then((users) => {
           users.forEach((element) => {
-            console.log(element);
-            let tbody = document.getElementById("data")
-            document.body.append(tbDate(element));
+            [trh, tr] = tbDate(element);
+            if(element["id"]==1){
+              table.append(trh,tr);
+            }else{
+              table.append(tr);
+            }
           });
+          document.body.append(table);
         });
     </script>
   </body>
